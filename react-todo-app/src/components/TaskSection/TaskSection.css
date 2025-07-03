@@ -1,0 +1,20 @@
+.task-section {
+    width: 100%;
+    margin: 0 0 10px 0;
+}
+
+.task-section-header {
+    font-size: 1.5rem;
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.task-section-header-text {
+    font-weight: 550;
+}
+
+.task-section-header-count {
+    color: lightslategray;
+}

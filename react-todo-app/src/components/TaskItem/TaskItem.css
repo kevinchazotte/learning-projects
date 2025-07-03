@@ -1,0 +1,43 @@
+.task-item {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: stretch;
+    padding: 12px 0;
+}
+
+.task-content {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    flex: 1;
+}
+
+.task-checkbox {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 1rem;
+}
+
+.task-description {
+    margin-left: 32px;
+    margin-top: 2px;
+    color: #666;
+    font-size: 0.9em;
+    padding-right: 16px;
+}
+
+.task-due-date {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    min-width: 100px;
+    font-size: 0.9em;
+    color: #888;
+    margin-left: 16px;
+}
+
+.task-due-date.overdue {
+    color: red;
+}

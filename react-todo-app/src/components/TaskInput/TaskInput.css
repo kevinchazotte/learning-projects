@@ -1,0 +1,73 @@
+.task-input {
+    margin-bottom: 10px;
+    width: 100%;
+}
+
+.task-input-header {
+    font-size: 2rem;
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.task-input-header-text {
+    font-weight: bold;
+}
+
+.task-input-header-count {
+    color: lightslategray;
+}
+
+.task-input {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.input-top-row {
+    display: grid;
+    grid-template-columns: 1fr auto auto;
+    align-items: center;
+    gap: 12px;
+}
+
+.task-name-input {
+    padding: 8px 12px;
+    font-size: 1rem;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    height: 40px;
+    box-sizing: border-box;
+}
+
+.due-date-input {
+    padding: 8px 12px;
+    font-size: 1rem;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    height: 40px;
+    box-sizing: border-box;
+}
+
+.description-input {
+    padding: 8px 12px;
+    font-size: 1rem;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-sizing: border-box;
+    height: 120px;
+    grid-column: 1 / span 2;
+}
+
+.add-button {
+    padding: 0 20px;
+    height: 40px;
+    background-color: #36454f;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 1rem;
+    cursor: pointer;
+    white-space: nowrap;
+}
