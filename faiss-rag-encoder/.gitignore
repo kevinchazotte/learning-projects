@@ -1,0 +1,19 @@
+## Ignore temporary files and build results
+
+# Python Tools
+__pycache__/
+.ipynb_checkpoints/
+*.pyc
+*.pyo
+*.pyd
+
+# Virtual environment
+*.env/
+venv/
+env/
+ENV/
+
+# Build results
+build/
+bld/
+
