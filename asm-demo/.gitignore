@@ -1,0 +1,13 @@
+## Ignore temporary files and build results
+
+# Ignore linux executable files
+*
+!*/
+!*.*
+
+# Ignore build-system files
+bld/
+build/
+
+*.o
+*.exe
