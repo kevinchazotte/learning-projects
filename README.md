@@ -1,0 +1,1 @@
+This repository contains a couple of works-in-progress that I have dabbled with. The types of projects that live here may include: interesting code or algorithms that I may want to refer back to, tools for compiling / building / running code, or small demo apps that I built to work with different architecture components.
