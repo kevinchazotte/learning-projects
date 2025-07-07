@@ -10,7 +10,9 @@ __pycache__/
 # Virtual environment
 *.env/
 venv/
+venv_linux/
 env/
+env_linux/
 ENV/
 
 # Build results

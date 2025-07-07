@@ -31,7 +31,7 @@ def upload_pdf():
 
 # POST endpoint to build document model
 @app.route('/encode-document', methods=['POST'])
-def receive_document():
+def encode_document():
     data = request.json # Access JSON data from the request body
     if 'document_key' not in data:
         return jsonify({'error': 'Bad Request', 'message': 'document_key not found in request json'}), 400
@@ -62,7 +62,7 @@ def receive_document():
 
 # POST endpoint to query model
 @app.route('/query', methods=['POST'])
-def hello_world():
+def query():
     data = request.json
     if 'query' not in data or 'document_key' not in data:
         return jsonify({'error': 'Bad Request', 'message': 'query not found in request json'}), 400
@@ -75,20 +75,16 @@ def hello_world():
     apiCorpusEmbeddings = pickle.loads(document_embeddings)
     apiSentencesProcessed = pickle.loads(document_sentences)
     top_k = 5
-    apiQueryEmbedding = apiModel.encode_query(query, convert_to_tensor=True)
+    apiQueryEmbedding = apiModel.encode_query(query)
 
     # use cosine-similarity and torch.topk to find the highest 5 scores
     cosineSimilarities = apiModel.similarity(apiQueryEmbedding, apiCorpusEmbeddings)[0]
     topScores, topIndices = torch.topk(cosineSimilarities, k=top_k)
-
-    print("\nQuery:", query)
-    print("Top 5 most similar sentences in corpus:")
     outputString = ""
     for score, idx in zip(topScores, topIndices):
         if idx:
             context = apiSentencesProcessed[max(0, idx-2):min(len(apiSentencesProcessed), idx+2)]
             outputString = outputString + f"(Score: {score:.4f})" + ' '.join(context)
-            print(f"(Score: {score:.4f})", context)
     return jsonify({"status": "success", "output": outputString})
 
 if __name__ == '__main__':
