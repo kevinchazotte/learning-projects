@@ -2,6 +2,7 @@ import base64
 import fitz
 from flask import Flask, jsonify, request, abort
 import io
+from openai import OpenAI
 import pickle
 import redis
 from sentence_transformers import SentenceTransformer
@@ -76,16 +77,41 @@ def query():
     apiSentencesProcessed = pickle.loads(document_sentences)
     top_k = 5
     apiQueryEmbedding = apiModel.encode_query(query)
-
     # use cosine-similarity and torch.topk to find the highest 5 scores
     cosineSimilarities = apiModel.similarity(apiQueryEmbedding, apiCorpusEmbeddings)[0]
     topScores, topIndices = torch.topk(cosineSimilarities, k=top_k)
-    outputString = ""
+    # the semantic context will already likely provide the answer that the user needs, so this is good enough to return if they did not include an open_api_key:
+    if 'open_api_key' not in data:
+        outputString = ""
+        for score, idx in zip(topScores, topIndices):
+            if idx:
+                # expand the context by providing sentences around the top search result
+                context = apiSentencesProcessed[max(0, idx-2):min(len(apiSentencesProcessed), idx+3)]
+                outputString = outputString + f"(Confidence: {score:.4f}) " + ' '.join(context)
+        return jsonify({"status": "success", "output": outputString})
+    # if they did include an open_api_key, utilize a generative LLM model API call to fine-tune the output
+    open_api_key = data.get('open_api_key')
+    client = OpenAI(api_key=open_api_key)
+    outputContext = ""
+    chunksPushedToContext = 0
     for score, idx in zip(topScores, topIndices):
-        if idx:
-            context = apiSentencesProcessed[max(0, idx-2):min(len(apiSentencesProcessed), idx+2)]
-            outputString = outputString + f"(Score: {score:.4f})" + ' '.join(context)
-    return jsonify({"status": "success", "output": outputString})
+        if idx and score > 0.5 and chunksPushedToContext < 3:
+            # expand the context by providing sentences around the top search result
+            context = apiSentencesProcessed[max(0, idx-1):min(len(apiSentencesProcessed), idx+2)]
+            outputContext = outputContext + ' '.join(context)
+            chunksPushedToContext += 1
+    prompt = "I am going to supply you with a context which you should consider ground truth and the basis of your response. I will also supply you with a query, which you should answer without adding new information other than the given context. The query is: " + query + ". The context is: " + outputContext + "."
+    try:
+        response = client.chat.completions.create(
+            model="gpt-3.5-turbo",
+            messages=[
+                {"role": "user", "content": prompt}
+            ]
+        )
+    except Exception as e:
+        return jsonify({'error': f'Error getting AI output: {str(e)}'}), 500
+    return jsonify({"status": "success", "output": response.choices[0].message.content})
+
 
 if __name__ == '__main__':
     apiModel = SentenceTransformer("all-MiniLM-L6-v2")

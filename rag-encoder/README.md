@@ -1,6 +1,6 @@
 # RAG-Encoder
 
-This project provides a backend infrastructure to offer an AI-enhanced semantic search tool. The user shall upload a PDF file and call an API to encode it into a vevctor database. Then, queries to the backend will perform semantic search over the uploaded document and optionally feed the results into an AI call to return the results in a more legible format. The intended usage is similar in function to Google's [NotebookLM](https://notebooklm.google.com/). A frontend for this work is not yet implemented, but could be done trivially with TypeScript/React or other alternatives; this backend has no dependency on the frontend. This framework could be generalized for scalability according to the following changes:
+This project provides a backend infrastructure to offer an AI-enhanced semantic search tool. The user shall upload a PDF file and call an API to encode it into a vector database. Then, queries to the backend will perform semantic search over the uploaded document and optionally feed the results into an AI call to return the results in a more legible format. The intended usage is similar in function to Google's [NotebookLM](https://notebooklm.google.com/). A frontend for this work is not yet implemented, but could be done trivially with TypeScript/React or other alternatives; this backend has no dependency on the frontend. This framework could be generalized for scalability according to the following changes:
 
 * Other implementations of a natural language processor and semantic encoding model should be investigated to replace Python's nltk and sentence_transformer libraries, or custom implementations could be written. Stress testing should be done to validate performance on very large files to determine if these services are sufficiently fast when serialized. The Python libraries also offer CUDA GPU parallelization which could be investigated.
 * Documents, their text, and their encodings are currently stored in-memory using Redis. The document itself is only required while encoding is happening; so, the document should be moved to a cache on upload from which it is purged after encoding completes. The parsed sentences and their encodings can be stored in persistent storage for access from queries.
@@ -24,11 +24,11 @@ You will need the redis-server package to connect to the in-memory database used
 
 ## Hosting the project
 
-Once the Redis Server is started, host the backend endpoints by running host_endpoints.py. Then, the `experiments` files can be run and the endpoints can be written via curl.
+Once the Redis Server is started, host the backend endpoints by running host_endpoints.py. Then, the `experiments` files can be run and the endpoints can be accessed via curl, Postman, or other tools.
 
 ## Experiments
 
-A number of experiments are published in [experiments](./experiments)). To run them, the following packages are required on Linux: 
+A number of experiments are published in [experiments](./experiments). To run them, the following packages are required on Linux: 
 
 * curl
 * jq
