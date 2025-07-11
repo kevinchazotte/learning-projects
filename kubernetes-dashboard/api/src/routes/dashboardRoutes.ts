@@ -1,4 +1,4 @@
-// dashboard-api/src/routes/dashboardRoutes.ts
+// api/src/routes/dashboardRoutes.ts
 import { Router } from 'express';
 import { getDashboardWidgets } from '../controllers/dashboardController';
 
