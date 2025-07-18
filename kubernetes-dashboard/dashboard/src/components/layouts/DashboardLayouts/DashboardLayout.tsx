@@ -8,7 +8,7 @@ interface DashboardLayoutProps {
   children: React.ReactNode;
 }
 
-const drawerWidth = 240;
+const drawerWidth = 180;
 
 const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children }) => {
   const [mobileOpen, setMobileOpen] = React.useState(false);
@@ -19,7 +19,7 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children }) => {
 
   const drawer = (
     <div>
-      <Toolbar /> {/* Occupies space of AppBar */}
+      <Toolbar />
       <Divider />
       <List>
         <ListItem disablePadding>
@@ -40,7 +40,6 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children }) => {
         </ListItem>
       </List>
       <Divider />
-      {/* You can add more menu items here */}
     </div>
   );
 
@@ -52,8 +51,8 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children }) => {
         sx={{
           width: { sm: `calc(100% - ${drawerWidth}px)` },
           ml: { sm: `${drawerWidth}px` },
-          boxShadow: '0px 2px 10px rgba(0, 0, 0, 0.05)', // Custom shadow for AppBar
-          zIndex: (theme) => theme.zIndex.drawer + 1, // Ensure AppBar is above Drawer
+          boxShadow: '0px 2px 10px rgba(0, 0, 0, 0.05)',
+          zIndex: (theme) => theme.zIndex.drawer + 1,
         }}
       >
         <Toolbar>
@@ -67,9 +66,8 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children }) => {
             <MenuIcon />
           </IconButton>
           <Typography variant="h6" noWrap component="div">
-            My Dashboard
+            MK Enterprises
           </Typography>
-          {/* Add user menu or other header elements here */}
           <Box sx={{ flexGrow: 1 }} /> {/* Pushes content to the right */}
         </Toolbar>
       </AppBar>
@@ -78,13 +76,12 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children }) => {
         sx={{ width: { sm: drawerWidth }, flexShrink: { sm: 0 } }}
         aria-label="mailbox folders"
       >
-        {/* The implementation can be swapped with js to avoid SEO duplication of the drawer. */}
         <Drawer
           variant="temporary"
           open={mobileOpen}
           onClose={handleDrawerToggle}
           ModalProps={{
-            keepMounted: true, // Better open performance on mobile.
+            keepMounted: true,
           }}
           sx={{
             display: { xs: 'block', sm: 'none' },
@@ -108,10 +105,10 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children }) => {
         component="main"
         sx={{
           flexGrow: 1,
-          p: 3, // Padding around the main content
+          p: 3,
           width: { sm: `calc(100% - ${drawerWidth}px)` },
-          mt: '64px', // Space for the fixed AppBar. Adjust if AppBar height changes.
-          minHeight: 'calc(100vh - 64px)', // Ensure content area fills remaining height
+          mt: '64px',
+          minHeight: 'calc(100vh - 64px)',
           backgroundColor: (theme) => theme.palette.background.default, // Use theme background color
         }}
       >

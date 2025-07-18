@@ -1,4 +1,4 @@
-// api/src/types/dashboardTypes.ts
+// dashboard-shared/types/widget.ts
 export interface Widget {
     id: number;
     title: string;

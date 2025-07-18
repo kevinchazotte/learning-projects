@@ -19,7 +19,7 @@ const RecentOrdersTable: React.FC<RecentOrdersTableProps> = ({ orders }) => {
       <Typography variant="h6" gutterBottom>
         Recent Orders
       </Typography>
-      <TableContainer>
+      <TableContainer sx={{ width: '100%', height: '300px' }}>
         <Table size="small" aria-label="recent orders table">
           <TableHead>
             <TableRow>

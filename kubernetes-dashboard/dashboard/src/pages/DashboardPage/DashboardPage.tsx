@@ -1,15 +1,14 @@
 // src/pages/DashboardPage/DashboardPage.tsx
 import React from 'react';
 import { Box, Grid, Typography } from '@mui/material';
-import Paper from '@mui/material/Paper';
-import { styled } from '@mui/material/styles';
+import { type Widget } from '@kubernetes-dashboard/dashboard-shared/types/widget';
 
 import DashboardLayout from '../../components/layouts/DashboardLayouts/DashboardLayout';
 import MetricChart from '../../components/dashboard/MetricChart/MetricChart';
 import WidgetCard from '../../components/dashboard/WidgetCard/WidgetCard';
 import RecentOrdersTable from '../../components/dashboard/RecentOrdersTable/RecentOrdersTable';
 
-// --- Dummy Data (In a real app, this would come from an API/state management) ---
+
 const mockDashboardData = {
   totalMetric: 152345,
   newUsers: 125,
@@ -30,21 +29,23 @@ const mockDashboardData = {
     { id: '4', customer: 'Diana Miller', total: 300.00, status: 'Pending' },
   ],
 };
-// ----------------------------------------------------------------------------------
 
-const Item = styled(Paper)(({ theme }) => ({
-  backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
-  ...theme.typography.body2,
-  padding: theme.spacing(1),
-  textAlign: 'center',
-  color: theme.palette.text.secondary,
-}));
+
+async function getWidgets(): Promise<Widget[]> {
+  const response = await fetch("http://127.0.0.1:56811/api/dashboard/widgets");
+  if (!response.ok) {
+    throw new Error(`HTTP Error: ${response.status}`)
+  }
+  return await response.json();
+}
 
 
 const DashboardPage: React.FC = () => {
-  // In a real app, you'd use a hook like `useDashboardData` here
-  // const { data, loading, error } = useDashboardData();
-  const data = mockDashboardData; // Using mock data for this example
+  const data = mockDashboardData; // Using mock data still
+  const [widgets, setWidgets] = React.useState<Widget[]>([]);
+  React.useEffect(() => {
+    getWidgets().then(setWidgets);
+  }, []);
 
   return (
     <DashboardLayout>
@@ -54,30 +55,19 @@ const DashboardPage: React.FC = () => {
         </Typography>
       </Box>
 
-      <Grid container spacing={3}>
-        {/* Widget Cards */}
-        <Item>
-          <WidgetCard title="Total Metric" value={`$${data.totalMetric.toLocaleString()}`} icon="💸" />
-        </Item>
-        <Item>
-          <WidgetCard title="New Users" value={data.newUsers} icon="👥" />
-        </Item>
-        <Item>
-          <WidgetCard title="Orders Pending" value={data.ordersPending} icon="📦" />
-        </Item>
-        <Item>
-          <WidgetCard title="Revenue Growth" value={`${data.revenueGrowth}%`} icon="📈" />
-        </Item>
+      <Grid container spacing={2}>
+        {widgets.map(widget => (
+          <Grid key={widget.id} size={3}>
+            <WidgetCard title={widget.title} value={widget.value} icon={widget.icon}/>
+          </Grid>
+        ))}
 
-        {/* Sales Chart */}
-        <Item>
+        <Grid size={6}>
           <MetricChart data={data.metricData} />
-        </Item>
-
-        {/* Recent Orders Table */}
-        <Item>
+        </Grid>
+        <Grid size={6}>
           <RecentOrdersTable orders={data.recentOrders} />
-        </Item>
+        </Grid>
       </Grid>
     </DashboardLayout>
   );
